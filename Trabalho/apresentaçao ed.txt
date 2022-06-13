@@ -1,0 +1,21 @@
+1º -  Falar das estruturas
+	- Estrutura de estado (livre ou ocupado)
+	- Estrutura dos elementos 
+	- Tabela em si (que é um vetor do tipo THEA de elementos ELEM)
+
+2º - Falar das operaçoes
+	- A que retorna a chave (falar do K mais tarde)
+	- Criar (aloca o tamanho necessario pra tabela e para os M elementos, alem de setar tudo livre)
+	- Inserir
+		- Falar dos H's e K
+		- While pra percorrer caso o original esteja ocupado
+		- If pra ver se os vetores sao duplicados
+		- Chama a funçao pra calcular a chave de novo
+		- Caso esteja livre escreve o valor, mas se tiver percorrido tudo retorna -1
+	- Print
+
+3º - Mostrar a main
+
+
+
+exemplos de entrada: 2, 10, 25, 68, 34, 99, 75, 41, 53, 86

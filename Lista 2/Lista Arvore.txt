@@ -1,0 +1,152 @@
+1 - 
+
+a) 10 20 12 1 2 8 15 5 7 (Pré Ordem)
+
+b) 1 2 12 8 20 5 7 15 10 (Em Ordem)
+
+c) 1 12 2 20 8 10 5 15 7 (Pós Ordem)
+
+2 - 
+
+a) 
+
+
+b)
+
+
+3 - 
+
+class Arvore{
+    public:
+        No* raiz;
+}
+
+class No{
+    public:
+        int valor;
+        No* esq;
+        No* dir;
+}
+
+a) Soma das folhas - Função que verifica se o nó existe, e caso exista verifica se é uma folha (esq e dir = NULL). Se for folha, os valores vao sendo somados e armazenados na variavel soma. Caso o nó nao seja uma folha, ele segue chamando recursivamente a função para os seus filhos ate percorrer a arvore toda
+
+int somaFolhas(No *no){
+    int soma = 0;
+    if(no){
+      if(no->dir() == NULL && no->esq() == NULL){
+        soma += no->valor();
+      }else{
+        soma += somaFolhas(no->esq());
+        soma += somaFolhas(no->dir());
+      }
+    }
+    return soma;
+  }
+
+
+b) Pós ordem - Verifica se o nó existe, e caso exista segue printando os valores da subarvore esquerda, depois os da subarvore a direita e por fim a raiz 
+
+  void posordem(No* no){
+    if(no){
+      posordem(no->esq());
+      posordem(no->dir());
+      printf("%d ", no->valor());
+    }
+  }
+
+
+c) Em ordem - Verifica se o nó existe, e caso exista percorre printando a subarvore a esquerda, depois a raiz e por fim a subarvore a direita
+
+void emOrdem(No* no)
+	{
+		if(no != NULL)
+		{
+			emOrdem(no->esq());
+			cout << no->valor() << " ";
+			emOrdem(no->dir());
+		}
+	}
+
+
+d) Pré ordem - Verifica se o nó existe, e caso exista percorre printando a raiz primeiro, depois a subarvore a esquerda e por fm a subarvore a direita
+
+  void preordem(No* no){
+    if(no){
+      printf("%d ", no->valor());
+      preordem(no->esq());
+      preordem(no->dir());
+    }
+  }
+
+
+e) Altura do nó
+
+  int alturaArv(No *raiz) {
+    if(raiz == NULL || (raiz->dir() == NULL && raiz->esq() == NULL)){
+      return 0;
+    }else{
+      int esq = 1 + alturaArv(raiz->esq());
+      int dir = 1 + alturaArv(raiz->dir());
+
+      if(esq>dir){
+        return esq;
+      }else{
+        return dir;
+      }
+    }
+  }
+
+  No* buscarNo(No *raiz, int chave) {
+    if(raiz == NULL) {
+        return NULL;
+    }else{
+      if(raiz->valor() == chave){
+        return raiz;
+      }else{
+        if(chave < raiz->valor()){
+          return buscarNo(raiz->esq(), chave);
+        }else{
+          return buscarNo(raiz->dir(), chave);
+        }
+      }
+    }
+  }
+
+  int alturaSubArv(No* raiz, int chave){
+    No *no = buscarNo(raiz, chave);
+    if(no){
+      return alturaArv(no);
+    }else{
+      return -1;
+    }
+  }
+
+f) Fator de balanceamento de um nó
+
+
+g) Percorrer a arvore em niveis
+
+void percorreNiveis(No *raiz){
+    queue <No> fila;
+    fila.push(*raiz);
+    while (!fila.empty()){ 
+      No atual = fila.front();
+      fila.pop();
+      printf("%d ", atual.getChave());
+      if (atual.esq() != NULL) fila.push(*atual.esq());
+      if (atual.dir() != NULL) fila.push(*atual.dir());
+    }
+  }
+
+
+h) Produto dos nós - Percorre todos os nós de maneira recursiva e vai multiplicando os valores e armazenando na variavel produto.
+
+  int produtoNos(No *no){
+    int produto = 1;
+    if(no){
+      produto *= no->valor();
+      produto *= produtoNos(no->esq());
+      produto *= produtoNos(no->dir());
+    }
+    return produto;
+  }

@@ -1,0 +1,73 @@
+#include<iostream>
+#include <stack>
+using namespace std;
+
+int menu(){
+  int opcao;
+  cout << endl << "Digite:" << endl <<  "1 - Para adicionar elementos na fila" << endl << "2 - Para remover elementos da fila" << endl ;
+  cin >> opcao;
+  return opcao;
+}
+
+void vazia(){
+	cout << endl << "A fila esta vazia!" << endl;
+}
+
+void print(stack<int> pilha1){
+  if(!pilha1.empty()){
+    stack<int> pilhaPrint;
+    pilhaPrint = pilha1;
+    cout << "Fila: ";
+    while(!pilhaPrint.empty()){
+      cout << pilhaPrint.top() << " -> ";
+      pilhaPrint.pop();
+    }
+    cout << endl;
+  }
+  else{
+    vazia();
+  }
+}
+
+int main(){
+	stack<int> pilha1;
+	stack<int> pilha2;
+	int op, num = 1;
+  	op = menu();
+	while(op != 3){
+		switch(op){
+			case 1:
+				cout << endl <<"Digite o numero que deseja adicionar na fila: ";
+				cin >> num;
+				cout << endl;
+				if(num != 0){
+				if(pilha1.empty() && pilha2.empty()){
+					pilha1.push(num);
+				}
+				else{
+					while(!pilha1.empty()){
+					pilha2.push(pilha1.top());
+					pilha1.pop();
+					}
+					pilha1.push(num);
+					while(!pilha2.empty()){
+					pilha1.push(pilha2.top());
+					pilha2.pop();
+					}
+				}
+				}
+				break;
+			case 2:
+				if(!pilha1.empty()){
+					cout << endl << "Removendo valor da frente da fila" << endl;
+					pilha1.pop();
+				}
+				else{
+					vazia();
+				}
+				break;
+		}
+		op = menu();
+	}
+    cout << endl << endl <<"Fim do programa =)";
+}

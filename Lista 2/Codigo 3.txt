@@ -1,0 +1,234 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+
+class No
+{
+private:
+	No *esq, *dir;
+	int chave;
+
+public:
+	No(int chave)
+	{
+		this->chave = chave;
+		esq = NULL;
+		dir = NULL;
+	}
+
+	int getChave()
+	{
+		return chave;
+	}
+
+
+	No* getEsq()
+	{
+		return esq;
+	}
+
+	No* getDir()
+	{
+		return dir;
+	}
+
+	void setEsq(No *no)
+	{
+		esq = no;
+	}
+
+	void setDir(No *no)
+	{
+		dir = no;
+	}
+};
+
+class Arvore
+{
+private:
+	No *raiz;
+
+public:
+	Arvore()
+	{
+		raiz = NULL;
+	}
+
+	void inserir(int chave)
+	{
+		if(raiz == NULL) // verifica se a árvore está vazia
+			raiz = new No(chave); // cria um novo nó
+		else
+			inserirAux(raiz, chave);
+	}
+
+	void inserirAux(No *no, int chave)
+	{
+		// se for menor, então insere à esquerda
+		if(chave < no->getChave())
+		{
+			// verifica se a esquerda é nulo
+			if(no->getEsq() == NULL)
+			{
+				No *novo_no = new No(chave);
+				no->setEsq(novo_no); // seta o novo_no à esquerda
+			}
+			else
+			{
+				// senão, continua percorrendo recursivamente
+				inserirAux(no->getEsq(), chave);
+			}
+		}
+		// se for maior, então insere à direita
+		else if(chave > no->getChave())
+		{
+			// verifica se a direita é nulo
+			if(no->getDir() == NULL)
+			{
+				No *novo_no = new No(chave);
+				no->setDir(novo_no); // seta o novo_no à direita
+			}
+			else
+			{
+				// senão, continua percorrendo recursivamente
+				inserirAux(no->getDir(), chave);
+			}
+		}
+		// se for igual, não vai inserir
+		// não pode existir 2 chaves iguais
+	}
+
+	No* getRaiz()
+	{
+		return raiz;
+	}
+
+	void emOrdem(No* no)
+	{
+		if(no != NULL)
+		{
+			emOrdem(no->getEsq());
+			cout << no->getChave() << " ";
+			emOrdem(no->getDir());
+		}
+	}
+
+  void preordem(No* no){
+    if(no){
+      printf("%d ", no->getChave());
+      preordem(no->getEsq());
+      preordem(no->getDir());
+    }
+  }
+
+  void posordem(No* no){
+    if(no){
+      posordem(no->getEsq());
+      posordem(no->getDir());
+      printf("%d ", no->getChave());
+    }
+  }
+  
+  int somaFolhas(No *no){
+    int soma = 0;
+    if(no){
+      if(no->getDir() == NULL && no->getEsq() == NULL){
+        soma += no->getChave();
+      }else{
+        soma += somaFolhas(no->getEsq());
+        soma += somaFolhas(no->getDir());
+      }
+    }
+    return soma;
+  }
+
+  int produtoNos(No *no){
+    int produto = 1;
+    if(no){
+      produto *= no->getChave();
+      produto *= produtoNos(no->getEsq());
+      produto *= produtoNos(no->getDir());
+    }
+    return produto;
+  }
+
+
+  int alturaArv(No *raiz) {
+    if(raiz == NULL || (raiz->getDir() == NULL && raiz->getEsq() == NULL)){
+      return 0;
+    }else{
+      int esq = 1 + alturaArv(raiz->getEsq());
+      int dir = 1 + alturaArv(raiz->getDir());
+
+      if(esq>dir){
+        return esq;
+      }else{
+        return dir;
+      }
+    }
+  }
+
+  int alturaSubArv(No* raiz, int chave){
+    No *no = buscarNo(raiz, chave);
+    if(no){
+      return alturaArv(no);
+    }else{
+      return -1;
+    }
+  }
+
+  No* buscarNo(No *raiz, int chave) {
+    if(raiz == NULL) {
+        return NULL;
+    }else{
+      if(raiz->getChave() == chave){
+        return raiz;
+      }else{
+        if(chave < raiz->getChave()){
+          return buscarNo(raiz->getEsq(), chave);
+        }else{
+          return buscarNo(raiz->getDir(), chave);
+        }
+      }
+    }
+  }
+
+
+void percorreNiveis(No *raiz){
+  queue <No> fila;
+  fila.push(*raiz);
+  while (!fila.empty()){ 
+    No atual = fila.front();
+    fila.pop();
+    printf("%d ", atual.getChave());
+    if (atual.getEsq() != NULL) fila.push(*atual.getEsq());
+    if (atual.getDir() != NULL) fila.push(*atual.getDir());
+  }
+}
+
+
+};
+
+int main(int argc, char *argv[])
+{
+	Arvore arv;
+	arv.inserir(8);
+	arv.inserir(3);
+	arv.inserir(10);
+	arv.inserir(14);
+	arv.inserir(13);
+	arv.inserir(1);
+	arv.inserir(6);
+	arv.inserir(4);
+	arv.inserir(7);
+
+	cout << "Em ordem: " ; arv.emOrdem(arv.getRaiz());
+  cout << "\nPos-ordem: " ; arv.posordem(arv.getRaiz());
+  cout << "\nPre-ordem: " ; arv.preordem(arv.getRaiz());
+  cout << "\nSoma das folhas: " << arv.somaFolhas(arv.getRaiz());
+  cout << "\nProduto dos nós: " << arv.produtoNos(arv.getRaiz());
+  cout << "\nAltura do nó: " << arv.alturaSubArv(arv.getRaiz(), 3);
+  cout << "\nAltura da arvore: " << arv.alturaArv(arv.getRaiz());
+  cout << "\nArvore em niveis: " ; arv.percorreNiveis(arv.getRaiz());
+	return 0;
+}

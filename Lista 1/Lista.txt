@@ -1,0 +1,595 @@
+1 - Nessa questao eu usei a biblioteca deque, propria do c++, para realizar as operaçoes dentro de um switch, de forma que as operaçoes podem ser realizadas ate que o usuario digite o numero 7 
+
+#include<iostream>
+#include <deque>
+using namespace std;
+
+int menu(){
+  int opcao;
+  cout << endl << "Digite:" << endl <<  "1 - Para adicionar elementos no inicio do deque" << endl << "2 - Para remover elementos do inicio do deque" << endl << "3 - Para adicionar elementos no fim do deque" << endl << "4 - Para remover elementos do fim do deque" << endl << "5 - Para mostrar o inicio do deque" << endl << "6 - Para mostrar o fim do deque" << endl;
+  cin >> opcao;
+  return opcao;
+}
+
+void vazia(){
+	cout << endl << "O deque esta vazio!" << endl;
+}
+
+
+int main(){
+  deque<int> deque;
+  int op, valor;
+  op = menu();
+    while(op != 7){
+      switch(op){
+            case 1:
+              cout << endl <<"Digite o valor que deseja adicionar no inicio da deque: ";
+              cin >> valor;
+              deque.push_front(valor);
+              break;
+            case 2:
+              if(!deque.empty()){
+								cout << endl << "Removendo valor do inicio do deque" << endl;
+              	deque.pop_front();
+							}
+							else{
+							vazia();
+							}
+							break;
+            case 3:
+              cout << endl <<"Digite o valor que deseja adicionar no fim do deque: ";
+              cin >> valor;
+              deque.push_back(valor);
+              break;
+						case 4:
+							if(!deque.empty()){
+								cout << endl << "Removendo valor do fim do deque" << endl;
+              	deque.pop_back();
+							}
+							else{
+							vazia();
+							}
+							break;
+            case 5:
+              if(!deque.empty()){
+              cout << endl << "Valor do inicio: " << deque.front() << endl;
+            }
+            else{
+            vazia();
+            }
+            break;
+          case 6:
+            if(!deque.empty()){
+            cout << endl << "Valor do fim: " << deque.back() << endl;
+          }
+          else{
+          vazia();
+          }
+          break;
+      }
+      op = menu();
+    }
+    cout << endl << endl <<"Fim do programa =)";
+  return 0;
+}
+
+2 - Nessa questao novamente usando um switch para definir as operaçoes que o usuario deseja realizar, o unico desafio é utilizar 2 filas de forma que uma funcione como uma pilha. Para fazer isso, no momento da inserçao caso ambas estejam vazias o elemento a ser adicionado entra na primeira fila. Após isso, para que cada novo elemento seja adicionado na "pilha" ele é adicionado na fila vazia (fila2). Entao, todos os elementos da fila1 vao sendo adicionados na fila2 e sendo apagados da fila1. Ao final, quando a fila1 estiver vazia e todos os elementos na fila2, novamente a fila2 é esvaziada e todos os elementos voltam pra fila1.
+
+#include<iostream>
+#include <queue>
+using namespace std;
+
+int menu(){
+  int opcao;
+  cout << endl << "Digite:" << endl <<  "1 - Para adicionar elementos na pilha" << endl << "2 - Para remover elementos da pilha" << endl << "3 - Para mostrar o topo da pilha" << endl << "4 - Para mostrar a pilha" << endl << "-> ";
+  cin >> opcao;
+  return opcao;
+}
+
+void vazia(){
+	cout << endl << "A pilha esta vazia!" << endl;
+}
+
+void print(queue<int> fila1){
+  if(!fila1.empty()){
+    queue<int> filaPrint;
+    filaPrint = fila1;
+    cout << "Pilha: ";
+    while(!filaPrint.empty()){
+      cout << filaPrint.front() << " -> ";
+      filaPrint.pop();
+    }
+    cout << endl;
+  }
+  else{
+    vazia();
+  }
+}
+
+int main(){
+  queue<int> fila1;
+  queue<int> fila2;
+  int op, num = 1;
+  op = menu();
+    while(op != 5){
+      switch(op){
+            case 1:
+              cout << endl <<"Digite o numero que deseja adicionar na pilha: ";
+              cin >> num;
+              cout << endl;
+              if(fila1.empty() && fila2.empty()){
+                fila1.push(num);
+              }
+              else{
+                fila2.push(num);
+                while(!fila1.empty()){
+                  fila2.push(fila1.front());
+                  fila1.pop();
+                }
+                while(!fila2.empty()){
+                  fila1.push(fila2.front());
+                  fila2.pop();
+                }
+              }
+              break;
+            case 2:
+              if(!fila1.empty()){
+								cout << endl << "Removendo valor do topo da pilha" << endl;
+              	fila1.pop();
+							}
+							else{
+							vazia();
+							}
+							break;
+            case 3:
+              if(!fila1.empty()){
+								cout << endl << "Valor do topo da pilha: " << fila1.front() << endl;
+							}
+							else{
+								vazia();
+							}
+							break;
+						case 4:
+							print(fila1);
+							break;
+      }
+      op = menu();
+    }
+    cout << endl << endl <<"Fim do programa =)";
+}
+
+
+3 - Para realizar as operaçoes de fila usando duas pilhas eu verifico se as duas pilhas estao vazias para adicionar o primeiro elemento. Caso sim, ele é adicionado na pilha1. Caso ja tenha alguma coisa, o conteudo da pilha1 é transferido pra pilha2, o novo numero é adicionado na pilha1 e o conteudo que foi para a pilha2 volta pra pilha1.
+
+#include<iostream>
+#include <stack>
+using namespace std;
+
+int menu(){
+  int opcao;
+  cout << endl << "Digite:" << endl <<  "1 - Para adicionar elementos na fila" << endl << "2 - Para remover elementos da fila" << endl << "3 - Para mostrar a frente da fila" << endl << "4 - Para mostrar a fila" << endl << "-> ";
+  cin >> opcao;
+  return opcao;
+}
+
+void vazia(){
+	cout << endl << "A fila esta vazia!" << endl;
+}
+
+void print(stack<int> pilha1){
+  if(!pilha1.empty()){
+    stack<int> pilhaPrint;
+    pilhaPrint = pilha1;
+    cout << "Fila: ";
+    while(!pilhaPrint.empty()){
+      cout << pilhaPrint.top() << " -> ";
+      pilhaPrint.pop();
+    }
+    cout << endl;
+  }
+  else{
+    vazia();
+  }
+}
+
+int main(){
+  stack<int> pilha1;
+  stack<int> pilha2;
+  int op, num = 1;
+  op = menu();
+    while(op != 5){
+      switch(op){
+            case 1:
+              cout << endl <<"Digite o numero que deseja adicionar na fila: ";
+              cin >> num;
+              cout << endl;
+              if(num != 0){
+                if(pilha1.empty() && pilha2.empty()){
+                  pilha1.push(num);
+                }
+                else{
+                  while(!pilha1.empty()){
+                    pilha2.push(pilha1.top());
+                    pilha1.pop();
+                  }
+                  pilha1.push(num);
+                  while(!pilha2.empty()){
+                    pilha1.push(pilha2.top());
+                    pilha2.pop();
+                  }
+                }
+              }
+              break;
+            case 2:
+              if(!pilha1.empty()){
+								cout << endl << "Removendo valor da frente da fila" << endl;
+              	pilha1.pop();
+							}
+							else{
+							vazia();
+							}
+							break;
+            case 3:
+              if(!pilha1.empty()){
+								cout << endl << "Valor da frente da fila: " << pilha1.top() << endl;
+							}
+							else{
+								vazia();
+							}
+							break;
+						case 4:
+							print(pilha1);
+							break;
+      }
+      op = menu();
+    }
+    cout << endl << endl <<"Fim do programa =)";
+}
+
+
+4 - 
+
+a) Primeiro eu preenchi uma pilha com nomeros de 0 a 9. Depois joguei todos os elementos da pilha em uma outra fila. Após isso basta apenas retornar todos os elementos da fila de volta pra pilha que eles estarão invertidos
+
+#include <stack>
+#include <queue>
+#include <iostream>
+
+using namespace std;
+
+void print(stack<int> pilha){
+    stack<int> pilhaPrint;
+    pilhaPrint = pilha;
+    cout << "Pilha: ";
+    while(!pilhaPrint.empty()){
+      cout << pilhaPrint.top() << " -> ";
+      pilhaPrint.pop();
+    }
+    cout << endl;
+}
+
+int main(){
+    stack<int> pilha;
+    for(int i=0;i<10;i++){
+        pilha.push(i);
+    }
+    print(pilha);
+    queue<int> fila;
+    while(!pilha.empty()){
+        fila.push(pilha.top());
+        pilha.pop();
+    }
+    while(!fila.empty()){
+        pilha.push(fila.front());
+        fila.pop();
+    }
+    print(pilha);
+}
+
+
+b) Basta repetir o procedimento da questao abaixo, mas após passar os elementos pra pilha2, deve-se passar novamente para uma terceira pilha, e só assim retornar para a pilha1 para que a sequencia invertida seja armazenada na pilha original
+
+
+
+
+c) Nessa questao eu preenchi uma pilha novamente com inteiros de 0 a 9, e somente copiando os elementos da pilha1 para a pilha2 a segunda pilha contem os elementos na sequencia invertida
+
+#include <stack>
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    stack<int> pilha;
+    for(int i=0;i<10;i++){
+        pilha.push(i);
+    }
+    stack<int> pilha2;
+    for(int i = 0; i < 10; i++){
+        pilha2.push(pilha.top());
+        pilha.pop();
+    }
+}
+
+
+
+5 - 
+
+a) Para inverter os elementos de uma fila usando uma pilha basta jogar os elementos da fila em uma pilha, e depois da pilha novamente para a fila.
+
+#include <stack>
+#include <queue>
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    queue<int> fila;
+    for(int i = 0; i < 10; i++){
+        fila.push(i);
+    }
+    stack<int> pilha;
+    for(int i = 0; i < 10; i++){
+        pilha.push(fila.front());
+        fila.pop();
+    }
+    for(int i = 0; i < 10; i++){
+        fila.push(pilha.top());
+        pilha.pop();
+    }
+    for(int i=0;i<10;i++){
+        cout << fila.front() << endl;
+        fila.pop();
+        if(fila.empty()){
+            cout << "Fiquei vazia" << endl;
+        }
+    }
+}
+
+
+
+b) Apos preencher a fila com numeros de 0 a 9, primeiramente sao jogados o primeiro valor na fila 1 e o segundo na fila 2 (0 , 1). Depois disso o valor da fila 1 é jogado na fila2. A partir dai o processo se torna verificar qual fila esta vazia, adicionar o elemento da frente da fila principal nela, e depois adicionar os que esta sendo guardado na outra fila auxiliar, ate que a fila principal esteja vazia
+
+
+#include <iostream> 
+#include <queue> 
+#include <stack> 
+ 
+using namespace std;   
+ 
+void print(queue<int> fila1){
+  queue<int> filaPrint;
+  filaPrint = fila1;
+  cout << "Fila: ";
+  while(!filaPrint.empty()){
+    cout << filaPrint.front() << " -> ";
+    filaPrint.pop();
+  }
+  cout << endl;
+}
+
+int main() { 
+queue<int> F;
+queue<int> f1;
+queue<int> f2;
+   for(int i=0;i<10;i++){
+       F.push(i);
+   }
+  cout << "1 ";
+  print(F);
+  cout << "2 ";
+  print(f1);
+  cout << "3 ";
+  print(f2); 
+  f1.push(F.front()); 
+  F.pop(); 
+  f2.push(F.front()); 
+  F.pop(); 
+  f2.push(f1.front()); 
+  f1.pop(); 
+   
+  while(!F.empty()){ 
+    if(f1.empty()){ 
+      f1.push(F.front()); 
+      F.pop(); 
+      while(!f2.empty()){ 
+        f1.push(f2.front()); 
+        f2.pop(); 
+      } 
+    }else if(f2.empty()){ 
+      f2.push(F.front()); 
+      F.pop(); 
+      while(!f1.empty()){ 
+        f2.push(f1.front()); 
+        f1.pop(); 
+      } 
+    } 
+ 
+  } 
+ 
+  if(!f1.empty()){ 
+    while(!f1.empty()){ 
+      F.push(f1.front()); 
+      f1.pop(); 
+    } 
+  } 
+ 
+  if(!f2.empty()){ 
+    while(!f2.empty()){ 
+      F.push(f2.front()); 
+      f2.pop(); 
+    } 
+  } 
+ 
+  cout << "1 ";
+  print(F);
+  cout << "2 ";
+  print(f1);
+  cout << "3 ";
+  print(f2); 
+}
+
+
+6 - Fiz um switch com todas as opçoes padroes de operaçoes de pilha e criei a funçao pilhaMin, que caso seja selecionada a opçao no menu mostra qual o menor valor da pilha sem perder a pilha e a necessidade de usar um pop() nela, pois usei uma pilha auxiliar
+
+#include<iostream>
+#include <stack>
+using namespace std;
+
+int menu(){
+  int opcao;
+  cout << endl << "Digite:" << endl <<  "1 - Para adicionar elementos na pilha" << endl << "2 - Para remover elementos da pilha" << endl << "3 - Para mostrar o topo da pilha" << endl << "4 - Para mostrar o maior elemento da pilha" << endl;
+  scanf("%d", &opcao);
+  return opcao;
+}
+
+void vazia(){
+	cout << endl << "A pilha esta vazia!" << endl;
+}
+
+void pilhaMin(stack<int> &pilha){
+		int menor = ' ';
+		stack<int> pilha2;
+		pilha2 = pilha;
+		if(!pilha.empty()){
+			while(!pilha2.empty()){
+						if(menor == ' '){
+							menor = pilha2.top();
+							pilha2.pop();
+						}
+						else{
+							if(pilha2.top() < menor){
+								menor = pilha2.top();
+							}
+							pilha2.pop();
+						}
+				}
+				cout << endl << "O menor valor é: " << menor << endl;
+		}
+		else{
+			vazia();
+		}	
+}
+
+int main(){
+  stack<int> pilha;
+  int op, valor;
+  op = menu();
+    while(op != 5){
+      switch(op){
+            case 1:
+              cout << endl <<"Digite o valor que deseja adicionar na pilha: ";
+              cin >> valor;
+              pilha.push(valor);
+              break;
+            case 2:
+              if(!pilha.empty()){
+								cout << endl << "Removendo valor do topo da pilha" << endl;
+              	pilha.pop();
+							}
+							else{
+							vazia();
+							}
+							break;
+            case 3:
+              if(!pilha.empty()){
+								cout << endl << "Valor do topo da pilha: " << pilha.top() << endl;
+							}
+							else{
+								vazia();
+							}
+							break;
+						case 4:
+							pilhaMin(pilha);
+							break;
+      }
+      op = menu();
+    }
+    cout << endl << endl <<"Fim do programa =)";
+  return 0;
+}
+
+
+7 - Nessa questao foi criada a string "infixa", que contem a expressao que vai ser transformada na notaçao posfixa. A seguir entao é feito um for com o tamanho dessa expressao e, dentro do for, um switch para verificar cada elemento (se ele é um operador, parentesis ou o caso default = letras/numeros). Os operandos e parentesis sao guardados na pilhaAux, e vao sendo adicionados na posF a medida que as condiçoes vao sendo satisfeitas. Caso nao sejam, é adicionado o proprio infixa[i], que seria o caracter da string que esta na iteraçao. No final os valores sao transferidos para a pilhaPrint para que nao sejam escritos no terminal invertidos.
+
+
+#include <iostream>
+#include <stack>
+#include <queue>
+#include <string>
+using namespace std;
+
+
+int main(){
+  string infixa = "((A+B)*(C-(F/D)))";
+  stack<char> pilhaAux;
+  stack<char> pilhaPosF;
+  stack<char> pilhaPrint;
+
+  for(int i = 0; i < infixa.size(); i++){
+    switch(infixa[i]){
+      case '(':
+        pilhaAux.push(infixa[i]);
+        break;
+      case ')': //move da pilha pra posF até encontrar '('
+        while(pilhaAux.top() != '('){
+          pilhaPosF.push(pilhaAux.top());
+          pilhaAux.pop();
+        }
+        pilhaAux.pop();
+        break;
+      case '+':
+        if(pilhaAux.empty()){ 
+          pilhaAux.push(infixa[i]); 
+        }
+        while(!pilhaAux.empty() && pilhaAux.top() != '('){
+          pilhaPosF.push(pilhaAux.top());
+          pilhaAux.pop();
+        }
+        pilhaAux.push(infixa[i]);
+        break;
+      case '-':
+        if(pilhaAux.empty()){ 
+          pilhaAux.push(infixa[i]); 
+        } 
+        while(!pilhaAux.empty() && pilhaAux.top() != '('){
+          pilhaPosF.push(pilhaAux.top());
+          pilhaAux.pop();
+        }
+        pilhaAux.push(infixa[i]);
+        break;
+      case '*':
+        if(pilhaAux.empty()){ 
+          pilhaAux.push(infixa[i]); 
+        }
+        while(!pilhaAux.empty() && pilhaAux.top() != '(' && pilhaAux.top() != '+' && pilhaAux.top() != '-'){
+          pilhaPosF.push(pilhaAux.top());
+          pilhaAux.pop();
+        }
+        pilhaAux.push(infixa[i]);
+
+        break;
+      case '/':
+         if(pilhaAux.empty()){ 
+          pilhaAux.push(infixa[i]); 
+        }
+        while(!pilhaAux.empty() && pilhaAux.top() != '(' && pilhaAux.top() != '+' && pilhaAux.top() != '-'){
+          pilhaPosF.push(pilhaAux.top());
+          pilhaAux.pop();
+        }
+        pilhaAux.push(infixa[i]);
+         break;
+      default:
+        pilhaPosF.push(infixa[i]);
+        break;
+    }
+  } 
+  while(!pilhaPosF.empty()){
+    pilhaPrint.push(pilhaPosF.top());
+    pilhaPosF.pop();
+  }
+  while(!pilhaPrint.empty()){
+    cout << pilhaPrint.top();
+    pilhaPrint.pop();
+  }
+}
